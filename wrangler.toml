@@ -1,0 +1,7 @@
+name = "pelinumerokokeilu"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pelinumerokokeilu-db"
+database_id = "VAIHDA_TAHAN_CLOUDFLAREN_D1_DATABASE_ID"

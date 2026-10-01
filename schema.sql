@@ -1,0 +1,5 @@
+CREATE TABLE pelaajat (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nimi TEXT NOT NULL,
+  pelinumero INTEGER NOT NULL
+);
