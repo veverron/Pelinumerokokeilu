@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelinumerokokeilu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #viesti {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pelinumerokokeilu</h1>
+
+  <label for="nimi">Nimi</label>
+  <input id="nimi" type="text">
+
+  <label for="pelinumero">Pelinumero</label>
+  <input id="pelinumero" type="number">
+
+  <button id="tallenna">Tallenna</button>
+
+  <div id="viesti"></div>
+
+  <h2>Tallennetut</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nimi</th>
+        <th>Pelinumero</th>
+      </tr>
+    </thead>
+    <tbody id="lista"></tbody>
+  </table>
+
+  <script>
+    async function haePelaajat() {
+      const response = await fetch("/api/pelaajat");
+      const pelaajat = await response.json();
+
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+
+      for (const pelaaja of pelaajat) {
+        const rivi = document.createElement("tr");
+        rivi.innerHTML = `
+          <td>${pelaaja.nimi}</td>
+          <td>${pelaaja.pelinumero}</td>
+        `;
+        lista.appendChild(rivi);
+      }
+    }
+
+    document.getElementById("tallenna").addEventListener("click", async () => {
+      const nimi = document.getElementById("nimi").value;
+      const pelinumero = document.getElementById("pelinumero").value;
+      const viesti = document.getElementById("viesti");
+
+      const response = await fetch("/api/pelaajat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nimi, pelinumero })
+      });
+
+      if (response.ok) {
+        viesti.textContent = "Tallennettu.";
+        document.getElementById("nimi").value = "";
+        document.getElementById("pelinumero").value = "";
+        haePelaajat();
+      } else {
+        const data = await response.json();
+        viesti.textContent = data.error || "Virhe.";
+      }
+    });
+
+    haePelaajat();
+  </script>
+</body>
+</html>

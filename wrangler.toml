@@ -1,0 +1,11 @@
+name = "pelinumerokokeilu"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pelinumerokokeilu-db"
+database_id = "126f0fd4-96b4-41cc-aa16-184e903d399b"
